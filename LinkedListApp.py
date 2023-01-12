@@ -62,6 +62,8 @@ class Main:
             elif usr_input == 4: # DELETE NODE
                 usr_input = input("Which item would you like to remove? ")
                 is_found = self.linklist.remove(usr_input)
+                if is_found == None:
+                    is_found = "No such item."
                 print("Is the item found? ", is_found)
             elif usr_input == 5: # DISPLAY
                 self.linklist.display()
@@ -75,23 +77,26 @@ class Main:
                 position = self.linklist.index(input("Search for element => "))
                 print("Position is at ", position)
             elif usr_input == 9: # EXIT
-                ask = input("Do you want to try again? [y/n] => If yes, the program redisplay the main menu. Otherwise, program exits.")
-                self.clear_console()
-                if ask == "n":
-                    exit()
+                quitting = input("Do you want to try again? [y/n] => If yes, the program redisplay the main menu. Otherwise, program exits.")
+                if quitting.lower() == "n":
+                    print("EXITING...")
+                    return True
             elif usr_input == 11:# CLEAR
                 print("LIST CLEARED".center(60,"#"))
                 self.linklist.clear()
             else:
-                return None
+                print("Choose among the options.")
+                return False
+            input("PROCESS COMPLETE".center(60, "="))
         except Exception:
-            sys.stdout.write("\n\n\nPlease enter appropriate input.")
-            time.sleep(2)
-        input("PROCESS COMPLETE".center(50, "="))
+            input("Please use correct input.")
+        print("CLEARING CONSOLE...")
         self.clear_console()
         
     def clear_console(self):
-        call("cls" if os.name == "posix" else "clear")
+        time.sleep(1)
+        os.system("cls") # for windows_os / os.name==nt
+        # call("cls" if os.name == "nt" else "clear") # this sometimes not work
         
         
 if __name__ == "__main__":
@@ -99,11 +104,11 @@ if __name__ == "__main__":
     while True:
         try:            
             m.display_menu()         
-            m.linklist_opt(int(input(">>> Select an option: ")))
+            program = m.linklist_opt(int(input(">>> Select an option: ")))
+            if program:
+                break
         except Exception:
             print("Use an appropriate option.")
             time.sleep(1)
             m.clear_console()
-
-
-    
+    exit()
